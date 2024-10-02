@@ -1,0 +1,133 @@
+<app-pantalla-espera></app-pantalla-espera>
+<div class="w-100 mt-3 text-start">
+  <button class="btn bg-velaio-3 text-light m-2" (click)="volver()">
+    <i class="fa-solid fa-arrow-left"></i>&nbsp;&nbsp;Volver
+  </button>
+</div>
+
+<br><br>
+
+<label class="fs-22 fw-bold">
+  Tareas Registradas:
+</label>
+<br><br>
+
+<div class="w-100 mt-3 txt-center">
+  <button type="button" class="btn btnnn mt-2" (click)="aplicarFiltro('todas')" [ngClass]="{'ampliado': ampliados[0]}"
+    (click)="onBotonClick(0)">
+    <i class="fa-solid fa-database"></i>
+    &nbsp;Todas
+  </button>&nbsp;&nbsp;&nbsp;&nbsp;
+  <button type="button" class="btn btnnn mt-2" (click)="aplicarFiltro('completadas')"
+    [ngClass]="{'ampliado': ampliados[1]}" (click)="onBotonClick(1)">
+    <i class="fa-solid fa-check"></i>
+    &nbsp;Completadas
+  </button>&nbsp;&nbsp;&nbsp;&nbsp;
+  <button type="button" class="btn btnnn mt-2" (click)="aplicarFiltro('pendientes')"
+    [ngClass]="{'ampliado': ampliados[2]}" (click)="onBotonClick(2)">
+    <i class="fa-solid fa-xmark"></i>
+    &nbsp;Pendientes
+  </button>
+</div>
+
+<div class="mt-3" *ngIf="rerender">
+  <label class="fs-16 text-center"
+    *ngIf="tareasFiltradas == null || tareasFiltradas.length == 0 && filtroActual == 'todas'">
+    No hay tareas creadas, diríjase al módulo "Crear tarea".
+  </label>
+
+  <label class="fs-16 text-center"
+    *ngIf="tareasFiltradas == null || tareasFiltradas.length == 0 && filtroActual == 'completadas'">
+    No hay tareas completadas.
+  </label>
+
+  <label class="fs-16 text-center"
+    *ngIf="tareasFiltradas == null || tareasFiltradas.length == 0 && filtroActual == 'pendientes'">
+    No hay tareas pendientes.
+  </label>
+
+  <div *ngIf="tareasFiltradas.length >= 1">
+    <div class="card card-servicios m-2" *ngFor="let tarea of tareasFiltradas; index as i">
+
+      <div class="btn-flotante">
+
+        <div class="boton-flotante">
+
+          <button type="button" class="btn bg-velaio-1 align-items-center justify-content-start text-light"
+            matTooltip="Editar tarea" (click)="editarTarea(tarea.id)">
+            <i class="fa-solid fa-pencil"></i>
+          </button> &nbsp;
+          <button type="button" class="btn bg-velaio-3 align-items-center justify-content-start text-light"
+            matTooltip="Eliminar tarea" (click)="openModal(tarea.id)">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+
+        </div>
+
+        <div class="card-body text-start">
+          <label class="fs-14"><b>{{tarea.nombre}}</b> - {{tarea.fecha_limite | date: 'yyyy-MM-dd'}}</label>
+
+          <br>
+          <br>
+
+          <label><b>Personas Asociadas:</b></label>
+          <br>
+          <div *ngFor="let persona of tarea.personas; index as j">
+            <label>
+              ➔ {{persona.nombre}} ({{persona.edad}})
+            </label>
+            <br>
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;Habilidades:&nbsp;</label>
+            <label *ngFor="let habilidad of persona.habilidades; index as k">
+              {{habilidad.descripcion}}<span *ngIf="k < (persona.habilidades.length - 1)">,&nbsp;</span>
+            </label>
+          </div>
+
+          <br>
+
+          <label *ngIf="tarea.completada" style="color: #1d8348;">
+            <b>Tarea completa</b>&nbsp;
+            <button type="button" class="btn bg-velaio-3 align-items-center justify-content-start text-light"
+              matTooltip="Cambiar estado a pendiente" (click)="cambiarEstado(i, false)">
+              <i class="fa-solid fa-xmark"></i>{{textoBoton2}}
+            </button>
+          </label>
+
+          <label *ngIf="!tarea.completada" style="color: #cb4335;">
+            <b>Tarea incompleta</b>&nbsp;
+            <button type="button" class="btn bg-velaio-2 align-items-center justify-content-start text-light"
+              matTooltip="Cambiar estado a completada" (click)="cambiarEstado(i, true)">
+              <i class="fa-solid fa-check"></i>{{textoBoton1}}
+            </button>
+          </label>
+
+        </div>
+
+      </div>
+    </div>
+
+    <br><br><br>
+  </div>
+</div>
+
+
+<div class="modal fade" id="modalAlerta" aria-hidden="true" aria-labelledby="modalAlertaLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header">
+        <h1 class="modal-title letrabotones fs-5" id="exampleModalToggleLabel">Alerta!&nbsp;<i
+            class="fa-solid fa-triangle-exclamation"></i></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label>¿Está seguro que desea eliminar esta tarea?</label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn bg-velaio-2 text-light" data-bs-target="#modalAlerta" data-bs-dismiss="modal"
+          data-bs-toggle="modal" aria-label="Close" (click)="eliminarTarea()">&nbsp;Si, eliminar</button>
+        <button type="button" class="btn bg-velaio-3 text-light" data-bs-target="#modalAlerta" data-bs-dismiss="modal"
+          data-bs-toggle="modal" aria-label="Close">&nbsp;Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

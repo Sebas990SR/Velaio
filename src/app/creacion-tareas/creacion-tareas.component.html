@@ -1,0 +1,231 @@
+<app-pantalla-espera></app-pantalla-espera>
+<div class="w-100 mt-3 text-start">
+  <button class="btn bg-velaio-3 text-light m-2" (click)="volver()">
+    <i class="fa-solid fa-arrow-left"></i>&nbsp;&nbsp;Volver
+  </button>
+</div>
+
+<br><br>
+
+<label class="fs-22 fw-bold">
+  Formulario de creación de tareas
+</label>
+<br><br>
+<label class="fs-16">
+  Por favor, ingrese la siguiente información:
+</label>
+<br><br>
+
+<form [formGroup]="formularioTarea">
+  <div class="row">
+
+    <div class="col-lg-6 mt-3">
+
+      <label class="h6">Nombre de la tarea
+        &nbsp;
+        <span *ngIf="!t['nombre'].valid"><i class="fa-solid fa-times text-danger"></i></span>
+        <span *ngIf="t['nombre'].valid"><i class="fa-solid fa-check text-success"></i></span>
+      </label>
+
+      <input formControlName="nombre" class="form-control text-center" type="text"
+        placeholder="Ingrese el nombre de la tarea" (input)="validarFormularioTarea()" />
+
+    </div>
+
+    <div class="col-lg-6 mt-3">
+
+      <label class="h6">Fecha límite
+        &nbsp;
+        <span *ngIf="!t['fecha_limite'].valid"><i class="fa-solid fa-times text-danger"></i></span>
+        <span *ngIf="t['fecha_limite'].valid"><i class="fa-solid fa-check text-success"></i></span>
+      </label>
+
+      <input formControlName="fecha_limite" class="form-control" type="date" (input)="validarFormularioTarea()" />
+
+    </div>
+
+  </div>
+
+  <div class="row mt-3">
+    <label class="h6">
+      Personas asociadas:
+    </label>
+    <label class="fs-16 text-center" *ngIf="arregloPersonasParcial.length == 0">
+      No hay personas asociadas, por favor haga clic en "Agregar persona"
+    </label>
+    <table class="table" *ngIf="arregloPersonasParcial.length >= 1">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Edad</th>
+          <th scope="col">Habilidades</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let persona of arregloPersonasParcial; index as i">
+          <td>{{i+1}}</td>
+          <th>{{persona.nombre}}</th>
+          <td>{{persona.edad}}</td>
+          <td>
+            <div *ngFor="let hab of persona.habilidades">
+              <label>
+                ● {{hab.descripcion}}
+              </label>
+              <br>
+            </div>
+          </td>
+          <td>
+            <button type="button" class="btn bg-velaio-3 pull-end" (click)="eliminarPersona(i)"
+              matTooltip="Eliminar persona">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="habilitarFormPersona">
+
+    <br><br>
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="formularioPersona">
+          <div class="row">
+
+            <div class="col-lg-6 mt-3">
+
+              <label class="h6">Nombre completo
+                &nbsp;
+                <span *ngIf="!p['nombre'].valid"><i class="fa-solid fa-times text-danger"></i></span>
+                <span *ngIf="p['nombre'].valid"><i class="fa-solid fa-check text-success"></i></span>
+              </label>
+
+              <input formControlName="nombre" class="form-control text-center" type="text" minlength="5"
+                placeholder="Ingrese el nombre" (input)="validarFormularioPersona()" />
+
+            </div>
+
+            <div class="col-lg-6 mt-3">
+
+              <label class="h6">Edad (años)
+                &nbsp;
+                <span *ngIf="!p['edad'].valid"><i class="fa-solid fa-times text-danger"></i></span>
+                <span *ngIf="p['edad'].valid"><i class="fa-solid fa-check text-success"></i></span>
+              </label>
+
+              <input formControlName="edad" class="form-control text-center" type="number" placeholder="Ingrese la edad"
+                (change)="validarEdad()" (input)="validarFormularioPersona()" />
+
+            </div>
+
+          </div>
+
+          <div class="row mt-2">
+            <div formArrayName="habilidades">
+              <label class="fs-16 mt-1">
+                <b>Habilidades:</b> (mínimo 1)</label>
+              <div class="col-sm-6 mt-2 text-start">
+                <button type="button" class="btn bg-velaio-1 text-light pull-end" (click)="agregarHabilidad()"
+                  matTooltip="Agregar habilidad">
+                  <i class="fa-solid fa-plus"></i>
+                  &nbsp;
+                  Agregar
+                </button>
+              </div>
+              <div *ngFor="let habilidad of habilidades.controls; let i = index">
+                <div [formGroupName]="i">
+                  <div class="subtarjet2">
+                    <div class="row">
+
+                      <div class="d-flex mt-3">
+                        <label class="h6 glacial-indiferent-font fw-bold">
+                          Habilidad {{i + 1}}:
+                          <span *ngIf="!habilidad.valid"><i class="fas fa-times text-danger"></i></span>
+                          <span *ngIf="habilidad.valid"><i class="fas fa-check text-success"></i></span>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="button" class="btn bg-velaio-3 pull-end" (click)="eliminarHabilidad(i)"
+                          matTooltip="Eliminar habilidad">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </div>
+
+                      <div class="col-sm-8 text-start">
+                        <div class="row">
+
+                          <div class="col-lg-6 mt-3">
+
+                            <input formControlName="descripcion" class="form-control text-center" type="text"
+                              placeholder="Descripción de la habilidad" (input)="validarFormularioPersona()" />
+
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <br>
+          <div class="w-100 mt-3 text-center">
+            <button class="btn bg-velaio-1 text-light m-2" (click)="guardarPersona()"
+              [disabled]="!habilitarGuardarPersona">
+              <i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Guardar persona
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <br>
+  <div class="w-100 mt-3 text-start" *ngIf="!habilitarFormPersona">
+    <button class="btn bg-velaio-1 text-light m-2" (click)="agregarPersona()">
+      <i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Agregar persona
+    </button>
+  </div>
+
+  <br>
+  <div class="w-100 mt-3 text-center">
+    <button class="btn bg-velaio-2 text-light m-2" (click)="openModal()" [disabled]="!habilitarGuardarTarea"
+      *ngIf="!actualizarDatos">
+      <i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Guardar tarea
+    </button>
+    <button class="btn bg-velaio-1 text-light m-2" (click)="openModal()" [disabled]="!habilitarGuardarTarea"
+      *ngIf="actualizarDatos">
+      <i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Actualizar tarea
+    </button>
+  </div>
+
+</form>
+
+<div class="modal fade" id="modalAlerta" aria-hidden="true" aria-labelledby="modalAlertaLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header">
+        <h1 class="modal-title letrabotones fs-5" id="exampleModalToggleLabel">Alerta!&nbsp;<i
+            class="fa-solid fa-triangle-exclamation"></i></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label *ngIf="!actualizarDatos">¿Está seguro que desea registrar esta tarea?</label>
+        <label *ngIf="actualizarDatos">¿Está seguro que desea actualizar esta tarea?</label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn bg-velaio-2 text-light" data-bs-target="#modalAlerta" data-bs-dismiss="modal"
+          data-bs-toggle="modal" aria-label="Close" (click)="guardarTarea()">&nbsp;Si, continuar</button>
+        <button type="button" class="btn bg-velaio-3 text-light" data-bs-target="#modalAlerta" data-bs-dismiss="modal"
+          data-bs-toggle="modal" aria-label="Close">&nbsp;Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

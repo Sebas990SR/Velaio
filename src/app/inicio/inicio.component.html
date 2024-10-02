@@ -1,0 +1,41 @@
+<app-pantalla-espera></app-pantalla-espera>
+
+<div class="container-inicio" *ngIf="modules[0]">
+    <div class="contenido">
+        <label class="fs-22 fw-bold">
+            Administrador de tareas
+        </label>
+        <br>
+        <br />
+        <label class="fs-18">
+            Prueba técnica VELAIO
+        </label>
+        <br>
+        <label class="fs-16">
+            Realizado por: Sebastian Andres Rivera Martinez
+        </label>
+
+        <br>
+        <br>
+
+        <button class="btn bg-velaio-2 text-light m-2" (click)="abrirModulo(1)">
+            <i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Crear tarea
+        </button>
+        &nbsp;&nbsp;
+        <button class="btn bg-velaio-1 text-light m-2" (click)="abrirModulo(2)">
+            <i class="fa-solid fa-list"></i>&nbsp;&nbsp;Listado de tareas
+        </button>
+    </div>
+
+</div>
+
+<div class="contenido-creacion" *ngIf="modules[1]">
+    <app-creacion-tareas [dataEdicion]="dataEdicion" [actualizarDatos]="actualizarDatos"
+        (desplegarMenuPrincipal)="abrirModulo(0, false)" (desplegarListaTareas)="abrirModulo(2); reiniciarValores()"
+        *ngIf="modules[1]"></app-creacion-tareas>
+</div>
+
+<div class="contenido-listado" *ngIf="modules[2]">
+    <app-listado-tareas (desplegarMenuPrincipal)="abrirModulo(0, false)"
+        (abrirEdicionTarea)="editarTarea($event)"></app-listado-tareas>
+</div>

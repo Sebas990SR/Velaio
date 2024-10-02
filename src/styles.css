@@ -1,0 +1,87 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 90%;
+}
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.container-inicio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  margin: 5%;
+}
+
+.contenido-creacion {
+  height: 100%;
+  margin: 5%;
+}
+
+.contenido-listado {
+  text-align: center;
+  height: 100%;
+  margin: 5%;
+}
+
+.fs-14 {
+  font-size: 14px;
+}
+.fs-16 {
+  font-size: 16px;
+}
+.fs-18 {
+  font-size: 18px;
+}
+.fs-20 {
+  font-size: 20px;
+}
+.fs-22 {
+  font-size: 22px;
+}
+
+.fw-bold {
+  font-weight: bold;
+}
+
+.bg-velaio-1 {
+  background-color: #1d6d80 !important;
+}
+
+.text-velaio-1 {
+  color: #1d6d80 !important;
+}
+
+.bg-velaio-2 {
+  background-color: #1d8348 !important;
+}
+
+.text-velaio-2 {
+  color: #1d8348 !important;
+}
+
+.bg-velaio-3 {
+  background-color: #e74c3c !important;
+}
+
+.text-velaio-3 {
+  color: #e74c3c !important;
+}
+
+.btnnn:disabled {
+  border: none !important;
+}
+
+.btn-flotante{
+  display: flex;
+}
+
+.boton-flotante{
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
